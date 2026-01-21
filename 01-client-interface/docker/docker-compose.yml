@@ -1,0 +1,21 @@
+version: "1.0"
+
+services:
+  postgres: 
+    image: postgres:17
+    container_name: 01-client-interface-postgres
+    environment:
+      POSTGRES_DB: playground
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: 12345
+    ports:
+      - "5432:5432"
+  
+  mongo: 
+    image: mongo:noble
+    container_name: 01-client-interface-mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: 12345
+    ports: 
+      - "27017:27017"
