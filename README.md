@@ -1,112 +1,200 @@
-# RelationalSQL-NoSQL
+# 🧠 Database Systems: Architecture, Theory & Practice
 
-# 📚 SQL Sub-lenguajes
+Este repositorio es un **estudio profundo y estructurado de los Sistemas de Gestión de Bases de Datos (DBMS)**, enfocado en **arquitectura, teoría, infraestructura y decisiones de diseño**, más allá del uso superficial de lenguajes o frameworks.
 
-SQL no es un lenguaje único, sino que se divide en **sub-lenguajes** según el tipo de operaciones que realices sobre la base de datos.
+El objetivo no es aprender *cómo usar* una base de datos, sino **entender cómo funciona realmente**, qué problemas fundamentales resuelve y qué trade-offs existen entre distintos motores como **PostgreSQL** y **MongoDB**.
 
 ---
 
-## 🔹 1. DDL → *Data Definition Language* (Lenguaje de Definición de Datos)
+## 🎯 Objetivo del repositorio
 
-Sirve para **definir y modificar la estructura** de la base de datos.
+Este repositorio busca desarrollar criterio técnico para:
 
-Ejemplos:
+- Diseñar modelos de datos correctos según el dominio
+- Entender concurrencia, consistencia y fallos
+- Analizar decisiones arquitectónicas internas
+- Elegir la base de datos adecuada según el problema
+- Comprender infraestructura, no solo APIs
 
-```sql
-CREATE TABLE usuario (
-    id SERIAL PRIMARY KEY,
-    username VARCHAR(50) NOT NULL UNIQUE,
-    email VARCHAR(100) NOT NULL,
-    role VARCHAR(20) NOT NULL
-);
+---
 
-ALTER TABLE usuario ADD COLUMN edad INT;
-DROP TABLE usuario;
+## 🚫 Qué NO es este repositorio
+
+Este repositorio **NO** es:
+- un tutorial de SQL o MongoDB
+- una colección de CRUDs
+- una guía de frameworks u ORMs
+- una abstracción simplificada del funcionamiento interno
+
+---
+
+## ✅ Qué SÍ es este repositorio
+
+Este repositorio **SÍ** es:
+- un estudio de **arquitectura interna de DBMS**
+- una exploración de **teoría de bases de datos**
+- un análisis comparativo entre modelos relacionales y documentales
+- un enfoque orientado a **ingeniería y sistemas**
+
+---
+
+## 🏗️ Arquitectura de un DBMS moderno
+
+El estudio se estructura siguiendo la arquitectura interna de una base de datos moderna, desde la interfaz de cliente hasta el hardware subyacente.
+
+### 🌳 Árbol de arquitectura (referencia central)
+
+```js
+
+BASE DE DATOS (DBMS) 
+│ 
+├── 1. Client Interface 
+│   ├── Drivers (JDBC, ODBC, Mongo Driver, etc) 
+│   ├── Protocolos (TCP, TLS) 
+│   └── Autenticación inicial 
+│ 
+├── 2. Query Layer 
+│   ├── Parser 
+│   │   ├── Lexical analysis 
+│   │   └── Syntax tree (AST) 
+│   │ 
+│   ├── Validator 
+│   │   ├── Schema validation 
+│   │   ├── Permissions 
+│   │   └── Type checking 
+│   │ 
+│   ├── Query Optimizer 
+│   │   ├── Cost-based optimizer 
+│   │   ├── Statistics 
+│   │   ├── Index selection 
+│   │   └── Execution plan 
+│   │ 
+│   └── Execution Engine 
+│       ├── Operators (scan, join, filter) 
+│       ├── Pipeline execution 
+│       └── Result materialization 
+│ 
+├── 3. Transaction Manager 
+│   ├── Transaction lifecycle 
+│   │   ├── BEGIN 
+│   │   ├── COMMIT 
+│   │   └── ROLLBACK 
+│   │ 
+│   ├── Isolation control 
+│   │   ├── MVCC 
+│   │   ├── Locks 
+│   │   └── Snapshots 
+│   │ 
+│   └── Concurrency control 
+│       ├── Deadlock detection 
+│       └── Conflict resolution 
+│ 
+├── 4. Storage Engine 
+│   ├── Data organization 
+│   │   ├── Pages / Blocks 
+│   │   ├── Segments 
+│   │   └── Tablespaces / Collections 
+│   │ 
+│   ├── Index Manager 
+│   │   ├── B-Tree 
+│   │   ├── Hash indexes 
+│   │   ├── LSM Trees 
+│   │   └── Compound / Partial indexes 
+│   │ 
+│   ├── Buffer Manager 
+│   │   ├── Cache pages in memory 
+│   │   ├── Eviction policy 
+│   │   └── Dirty page tracking 
+│   │ 
+│   └── Free space manager 
+│ 
+├── 5. Durability & Recovery 
+│   ├── Write-Ahead Log (WAL / Journal) 
+│   ├── Checkpoints 
+│   ├── Crash recovery 
+│   └── Backup & Restore 
+│ 
+├── 6. Replication & Distribution 
+│   ├── Replication 
+│   │   ├── Leader / Follower 
+│   │   ├── Sync / Async 
+│   │   └── Log shipping 
+│   │ 
+│   ├── Consensus 
+│   │   ├── Raft / Paxos 
+│   │   └── Leader election 
+│   │ 
+│   ├── Sharding / Partitioning 
+│   │   ├── Range-based 
+│   │   ├── Hash-based 
+│   │   └── Zone-based 
+│   │ 
+│   └── Failover 
+│ 
+├── 7. Security Layer 
+│   ├── Authentication 
+│   ├── Authorization (RBAC) 
+│   ├── Encryption at rest 
+│   └── Encryption in transit 
+│ 
+├── 8. Observability & Maintenance 
+│   ├── Metrics 
+│   ├── Logs 
+│   ├── Query statistics 
+│   ├── Vacuum / Compaction 
+│   └── Auto-tuning 
+│ 
+└── 9. Hardware / OS Layer 
+    ├── CPU 
+    ├── RAM 
+    ├── Disk (SSD / HDD / NVMe) 
+    ├── Filesystem 
+    └── Network 
+
 ```
 
-Palabras clave: `CREATE`, `ALTER`, `DROP`, `TRUNCATE`.
 
 ---
 
-## 🔹 2. DML → *Data Manipulation Language* (Lenguaje de Manipulación de Datos)
+## 🧩 Bases de datos estudiadas
 
-Sirve para **insertar, modificar y borrar registros** (CRUD).
+### PostgreSQL
+- Modelo relacional
+- Consistencia fuerte (ACID)
+- MVCC y optimización avanzada
+- Ideal para dominios transaccionales
 
-Ejemplos:
+### MongoDB
+- Modelo documental
+- Escalabilidad horizontal
+- Alta disponibilidad
+- Diseño basado en agregados y desnormalización
 
-```sql
-INSERT INTO usuario(username, email, role)
-VALUES ('ana123', 'ana@mail.com', 'ADMIN');
-
-UPDATE usuario SET role = 'SUPERADMIN' WHERE id = 1;
-
-DELETE FROM usuario WHERE id = 2;
-```
-
-Palabras clave: `INSERT`, `UPDATE`, `DELETE`.
-
----
-
-## 🔹 3. DQL → *Data Query Language* (Lenguaje de Consulta de Datos)
-
-Sirve para **consultar (leer)** datos.
-
-Ejemplos:
-
-```sql
-SELECT * FROM usuario;
-
-SELECT username, email
-FROM usuario
-WHERE role = 'ADMIN'
-ORDER BY username ASC;
-
-SELECT role, COUNT(*)
-FROM usuario
-GROUP BY role;
-```
-
-Palabras clave: `SELECT`.
+Ambas se estudian **de forma comparativa**, entendiendo que resuelven **problemas distintos**.
 
 ---
 
-## 🔹 4. DCL → *Data Control Language* (Lenguaje de Control de Datos)
+## 🧠 Enfoque de aprendizaje
 
-Sirve para **gestionar permisos y roles de usuarios**.
-
-Ejemplos:
-
-```sql
-GRANT SELECT, INSERT ON usuario TO app_user;
-REVOKE INSERT ON usuario FROM app_user;
-```
-
-Palabras clave: `GRANT`, `REVOKE`.
+El aprendizaje se basa en:
+- teoría primero, implementación después
+- entender *por qué* antes que *cómo*
+- justificar cada decisión de diseño
+- analizar impactos de infraestructura
 
 ---
 
-## 🔹 5. TCL → *Transaction Control Language* (Lenguaje de Control de Transacciones)
+## 📚 Referencias clave
 
-Sirve para **manejar transacciones** y garantizar propiedades **ACID**.
-
-Ejemplos:
-
-```sql
-BEGIN;
-UPDATE cuenta SET saldo = saldo - 100 WHERE id = 1;
-UPDATE cuenta SET saldo = saldo + 100 WHERE id = 2;
-COMMIT;   -- guarda los cambios
--- ROLLBACK; -- deshace si hubo error
-```
-
-Palabras clave: `BEGIN`, `COMMIT`, `ROLLBACK`, `SAVEPOINT`.
+- *Designing Data-Intensive Applications* – Martin Kleppmann  
+- *Database Internals* – Alex Petrov  
+- Documentación oficial de PostgreSQL y MongoDB  
 
 ---
 
-# 📌 Resumen rápido
+## 🧠 Nota final
 
-* **DDL** → Estructura (tablas, columnas, constraints).
-* **DML** → CRUD (insertar, actualizar, eliminar).
-* **DQL** → Consultar (SELECT).
-* **DCL** → Permisos (GRANT, REVOKE).
-* **TCL** → Transacciones (BEGIN, COMMIT, ROLLBACK).
+> *Una base de datos no es un contenedor de datos,  
+> es un sistema que gobierna la verdad bajo concurrencia y fallos.*
+
+Este repositorio refleja esa filosofía.
