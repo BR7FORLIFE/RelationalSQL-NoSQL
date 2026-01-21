@@ -1,0 +1,11 @@
+/01-client-interface/mongodb/python/bin
+/01-client-interface/mongodb/python/include
+/01-client-interface/mongodb/python/lib
+/01-client-interface/mongodb/python/pyvenv.ctg
+/01-client-interface/mongodb/python/lib64
+
+/01-client-interface/postgres/python/bin
+/01-client-interface/postgres/python/include
+/01-client-interface/postgres/python/lib
+/01-client-interface/postgres/python/pyvenv.ctg
+/01-client-interface/postgres/python/lib64
