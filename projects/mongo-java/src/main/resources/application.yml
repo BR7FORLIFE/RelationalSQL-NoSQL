@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: mongo-java
+  mongodb:
+    uri: mongodb://br7forlife:12345@localhost:27017/auth?Authsource=admin
